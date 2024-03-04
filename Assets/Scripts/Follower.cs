@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Cinemachine;
 
 public class Follower : MonoBehaviour
 {
@@ -12,14 +13,13 @@ public class Follower : MonoBehaviour
 
     void Start()
     {
-        player = GameObject.FindGameObjectWithTag("Player");
         rb = GetComponent<Rigidbody>();
     }
 
     void Update()
     {
         CalculateDistanceToPlayer();
-
+        CheckPlayersPosition();
     }
 
     void CalculateDistanceToPlayer()
@@ -38,10 +38,20 @@ public class Follower : MonoBehaviour
         if (distance > 8)
         {
             //transform.position = player.transform.position + offset;
-            transform.position = Vector2.MoveTowards(transform.position, player.transform.position, 0.01f);
+            transform.position = Vector2.MoveTowards(transform.position, player.transform.position, 0.1f);
         }
     }
-
+    void CheckPlayersPosition()
+    {
+        if(player.transform.position.x < gameObject.transform.position.x)
+        {
+            transform.localScale = new Vector3(-1, 1 ,1);
+        }
+        else
+        {
+            transform.localScale = new Vector3(1, 1, 1);
+        }
+    }
     //void FixedUpdate()
     //{
     //    RaycastHit hit;
