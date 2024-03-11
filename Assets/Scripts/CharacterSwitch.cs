@@ -23,9 +23,12 @@ public class CharacterSwitch : MonoBehaviour
             player1.GetComponent<PlayerController>().enabled = true;
             player1.GetComponent<Follower>().enabled = false;
             player1.GetComponent<PlayerController>().selectedCharacter.SetActive(true);
+            player1.GetComponent<IceProjectiles>().enabled = true;
+            player1.GetComponent<FireProjectiles>().enabled = false;
             player2.GetComponent<PlayerController>().selectedCharacter.SetActive(false);
             player2.GetComponent<PlayerController>().enabled = false;
             player2.GetComponent<Follower>().enabled = true;
+
         }
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
@@ -34,6 +37,8 @@ public class CharacterSwitch : MonoBehaviour
             player2.GetComponent<PlayerController>().enabled = true;
             player2.GetComponent<Follower>().enabled = false;
             player2.GetComponent<PlayerController>().selectedCharacter.SetActive(true);
+            player1.GetComponent<IceProjectiles>().enabled = false;
+            player1.GetComponent<FireProjectiles>().enabled = true;
             player1.GetComponent<PlayerController>().enabled = false;
             player1.GetComponent<Follower>().enabled = true;
             player1.GetComponent<PlayerController>().selectedCharacter.SetActive(false);
