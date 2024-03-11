@@ -4,10 +4,11 @@ using UnityEngine;
 
 public class DashArrow : MonoBehaviour
 {
-    // Update is called once per frame
+    public float dashAngle;
     void Update()
     {
         RotateSpriteTowardsMouse();
+        
     }
 
     void RotateSpriteTowardsMouse()
@@ -26,7 +27,7 @@ public class DashArrow : MonoBehaviour
 
         // Calculate the angle from the direction
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-
+        dashAngle = angle;
         // Adjust the angle by adding or subtracting 90 degrees
         angle -= 90f;
 
