@@ -2,12 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class PlayerController : MonoBehaviour
 {
     public float moveSpeed = 5f;
     public float jumpForce = 10f;
-    public float dashForce = 10f;
+    public float dashForcex;
+    public float dashForcey;
     public LayerMask groundLayer;
 
     private Rigidbody rb;
@@ -20,6 +22,8 @@ public class PlayerController : MonoBehaviour
     public GameObject dashArrow;
     public GameObject dashScript;
     public Collider mainCollider;
+
+    public GameObject selectedCharacter;
 
     private void Start()
     {
@@ -52,27 +56,31 @@ public class PlayerController : MonoBehaviour
         if(Input.GetMouseButtonDown(1))
         {
             spriteRenderer.sprite = ballSprite;
-            isDashing = true;
+            //isDashing = true;
             dashArrow.SetActive(true);
             rb.useGravity = false;
-            mainCollider.enabled = false;
+            rb.drag = 100;
+            //mainCollider.enabled = false;
+
         }
 
         if(Input.GetMouseButtonUp(1))
         {
+            float dashAngle = dashScript.GetComponent<DashArrow>().dashAngle;
+            rb.drag = 0;
             spriteRenderer.sprite = normalSprite;
-            isDashing = false;
-            dashArrow.SetActive(false);
-            rb.AddForce(dashArrow.transform.up * dashForce, ForceMode.Impulse);
+            //isDashing = false;
             rb.useGravity = true;
-            StartCoroutine(WaitToTurnOnCollider()); 
-
+            dashArrow.SetActive(false);
+            Dash();
+            //StartCoroutine(WaitToTurnOnCollider());
         }
     }
     IEnumerator WaitToTurnOnCollider()
     {
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(0.5f);
         mainCollider.enabled = true;
+        rb.useGravity = true;
     }
     private void HandleMovement()
     {
@@ -90,7 +98,6 @@ public class PlayerController : MonoBehaviour
                 transform.localScale = new Vector3(Mathf.Sign(horizontalInput), 1, 1);
             }
         }    
-
     }
 
     private void Move()
@@ -100,7 +107,6 @@ public class PlayerController : MonoBehaviour
             // Apply horizontal movement
             rb.velocity = new Vector3(Input.GetAxis("Horizontal") * moveSpeed, rb.velocity.y, 0f);
         }
-
     }
 
     private void Jump()
@@ -109,6 +115,21 @@ public class PlayerController : MonoBehaviour
         rb.velocity = new Vector3(rb.velocity.x, jumpForce, 0f);
     }
 
+    private void Dash()
+    {
+        rb.velocity = new Vector2(0, 0);
+        // Convert the angle to radians
+        float angleInRadians = dashArrow.GetComponent<DashArrow>().dashAngle * Mathf.Deg2Rad;
+
+        // Calculate the direction based on the angle
+        Vector2 dashDirection = new Vector2(Mathf.Cos(angleInRadians) * dashForcex, Mathf.Sin(angleInRadians) * dashForcey);
+
+        // Apply force in the calculated direction
+        //rb.AddForce(dashDirection * dashForce, ForceMode.Impulse);
+        rb.AddForce(dashDirection, ForceMode.Impulse);
+        //rb.velocity = new Vector3(rb.velocity.x, rb.velocity.y, 0f);
+        print(dashDirection);
+    }
 
     void CheckGround()
     {

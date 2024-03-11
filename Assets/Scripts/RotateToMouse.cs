@@ -2,16 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DashArrow : MonoBehaviour
+public class RotateToMouse : MonoBehaviour
 {
-    public float dashAngle;
     void Update()
     {
-        RotateSpriteTowardsMouse();
-        
+        RotateTowardsMousePosition();
     }
-
-    void RotateSpriteTowardsMouse()
+    void RotateTowardsMousePosition()
     {
         // Get the mouse position in screen space
         Vector3 mousePositionScreen = Input.mousePosition;
@@ -22,17 +19,15 @@ public class DashArrow : MonoBehaviour
         // Convert the mouse position to world space
         Vector3 mousePositionWorld = Camera.main.ScreenToWorldPoint(mousePositionScreen);
 
-        // Calculate the direction from the sprite to the mouse
+        // Calculate the direction from the object to the mouse
         Vector3 direction = mousePositionWorld - transform.position;
 
         // Calculate the angle from the direction
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-        dashAngle = angle;
-        // Adjust the angle by adding or subtracting 90 degrees
+
         angle -= 90f;
 
-        // Rotate the sprite to face the mouse
+        // Rotate the object to face the mouse
         transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
     }
 }
-
