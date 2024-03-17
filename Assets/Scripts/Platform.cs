@@ -8,9 +8,11 @@ public class Platform : MonoBehaviour
     public Slider slider;
     public float duration;
     public float maxDuration;
+    public UIManager uIManager;
     void Start()
     {
         duration = maxDuration;
+        uIManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<UIManager>();
     }
 
     // Update is called once per frame
@@ -21,6 +23,7 @@ public class Platform : MonoBehaviour
 
         if(duration < 0)
         {
+            uIManager.ice += uIManager.iceCost;
             Destroy(gameObject);
         }
     }

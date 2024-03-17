@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class FireProjectiles : MonoBehaviour
 {
@@ -10,24 +11,36 @@ public class FireProjectiles : MonoBehaviour
     public GameObject projectile;
     public GameObject firingPoint;
     public bool canFire;
+
+
+    public Slider slider;
+    public float reloadRate;
+
+    public UIManager uiManager;
     void Start()
     {
         canFire = true;
+
+
     }
 
-    // Update is called once per frame
     void Update()
     {
         if(Input.GetMouseButtonDown(0))
         {
             if(canFire)
             {
-                GameObject go = Instantiate(projectile, firingPoint.transform.position, firingPoint.transform.rotation);
-                //Quaternion angle = firingPoint.transform.rotation;
-                go.GetComponent<Rigidbody>().AddForce(firingPoint.transform.up * projectileForce, ForceMode.Impulse);
-                StartCoroutine(ProjectileCooldown());
+                if(uiManager.fire > uiManager.fireCost)
+                {
+                    GameObject go = Instantiate(projectile, firingPoint.transform.position, firingPoint.transform.rotation);
+                    //Quaternion angle = firingPoint.transform.rotation;
+                    go.GetComponent<Rigidbody>().AddForce(firingPoint.transform.up * projectileForce, ForceMode.Impulse);
+                    StartCoroutine(ProjectileCooldown());
+                    uiManager.fire -= uiManager.fireCost;
+                }
             }
         }
+
     }
     IEnumerator ProjectileCooldown()
     {
