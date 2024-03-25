@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,10 +8,13 @@ public class IceProjectiles : MonoBehaviour
     public GameObject platform;
     public GameObject platformGhost;
     public bool ghostActive;
-    void Start()
+
+    public UIManager uiManager;
+
+
+    private void Start()
     {
-        
-        
+
     }
     void Update()
     {
@@ -23,7 +27,12 @@ public class IceProjectiles : MonoBehaviour
             }
             else
             {
-                Instantiate(platform, platformGhost.transform.position, platformGhost.transform.rotation);
+                if(uiManager.ice >= uiManager.iceCost)
+                {
+                    Instantiate(platform, platformGhost.transform.position, platformGhost.transform.rotation);
+                    uiManager.ice -= uiManager.iceCost;
+                }
+
             }
         }
         if(ghostActive)
@@ -31,6 +40,11 @@ public class IceProjectiles : MonoBehaviour
             GhostPosition();
         }
         if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            ghostActive = false;
+            platformGhost.SetActive(false);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha2))
         {
             ghostActive = false;
             platformGhost.SetActive(false);

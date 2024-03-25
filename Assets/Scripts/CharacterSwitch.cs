@@ -8,6 +8,8 @@ public class CharacterSwitch : MonoBehaviour
     public CinemachineVirtualCamera virtualCamera;
     public GameObject player1;
     public GameObject player2;
+    public GameObject player1UI;
+    public GameObject player2UI;
     void Start()
     {
         virtualCamera.Follow = player1.transform;
@@ -24,10 +26,14 @@ public class CharacterSwitch : MonoBehaviour
             player1.GetComponent<Follower>().enabled = false;
             player1.GetComponent<PlayerController>().selectedCharacter.SetActive(true);
             player1.GetComponent<IceProjectiles>().enabled = true;
-            player1.GetComponent<FireProjectiles>().enabled = false;
+
             player2.GetComponent<PlayerController>().selectedCharacter.SetActive(false);
             player2.GetComponent<PlayerController>().enabled = false;
             player2.GetComponent<Follower>().enabled = true;
+            player2.GetComponent<FireProjectiles>().enabled = false;
+
+            player1UI.transform.localScale = new Vector3(0.6f, 0.6f, 0.6f);
+            player2UI.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
 
         }
         if (Input.GetKeyDown(KeyCode.Alpha2))
@@ -37,11 +43,15 @@ public class CharacterSwitch : MonoBehaviour
             player2.GetComponent<PlayerController>().enabled = true;
             player2.GetComponent<Follower>().enabled = false;
             player2.GetComponent<PlayerController>().selectedCharacter.SetActive(true);
+            player2.GetComponent<FireProjectiles>().enabled = true;
+
             player1.GetComponent<IceProjectiles>().enabled = false;
-            player1.GetComponent<FireProjectiles>().enabled = true;
             player1.GetComponent<PlayerController>().enabled = false;
             player1.GetComponent<Follower>().enabled = true;
             player1.GetComponent<PlayerController>().selectedCharacter.SetActive(false);
+
+            player1UI.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
+            player2UI.transform.localScale = new Vector3(0.6f, 0.6f, 0.6f);
         }
     }
 }
