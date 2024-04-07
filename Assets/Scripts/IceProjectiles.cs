@@ -57,7 +57,7 @@ public class IceProjectiles : MonoBehaviour
         Vector3 mousePositionScreen = Input.mousePosition;
 
         // Set a constant distance from the camera to the object in world space
-        mousePositionScreen.z = 20f;
+        mousePositionScreen.z = 60f;
 
         // Convert the mouse position to world space
         Vector3 mousePositionWorld = Camera.main.ScreenToWorldPoint(mousePositionScreen);

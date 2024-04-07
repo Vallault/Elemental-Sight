@@ -12,6 +12,8 @@ public class PlayerController : MonoBehaviour
     public float dashForcey;
     public LayerMask groundLayer;
 
+    public float spikeDamage;
+
     private Rigidbody rb;
     public bool isGrounded;
     public bool facingRight = true;
@@ -24,6 +26,7 @@ public class PlayerController : MonoBehaviour
     public Collider mainCollider;
 
     public GameObject selectedCharacter;
+    public PlayerStats playerStats;
 
     private void Start()
     {
@@ -38,7 +41,7 @@ public class PlayerController : MonoBehaviour
 
         // Handle player input
         HandleMovement();
-        HandleDash();
+        //HandleDash();
         if (isGrounded && Input.GetButtonDown("Jump"))
         {
             Jump();
@@ -50,7 +53,18 @@ public class PlayerController : MonoBehaviour
         // Apply movement forces in FixedUpdate for better physics behavior
         Move();
     }
-
+    private void OnCollisionEnter(Collision collision)
+    {
+        if(collision.collider.tag == "Spike")
+        {
+            print("Should be taking damage");
+            TakeDamage(spikeDamage);
+        }
+    }
+    void TakeDamage(float amount)
+    {
+        playerStats.oxygen -= amount;
+    }
     private void HandleDash()
     {
         if(Input.GetMouseButtonDown(1))
