@@ -1,11 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 public class PlayerController : MonoBehaviour
 {
+
+
     public float moveSpeed = 5f;
     public float jumpForce = 10f;
     public float dashForcex;
@@ -13,6 +14,9 @@ public class PlayerController : MonoBehaviour
     public LayerMask groundLayer;
 
     public float spikeDamage;
+
+    public Animator animator;
+    public Material godRaysBlue;
 
     private Rigidbody rb;
     public bool isGrounded;
@@ -27,6 +31,11 @@ public class PlayerController : MonoBehaviour
 
     public GameObject selectedCharacter;
     public PlayerStats playerStats;
+
+    public GameObject rockParticle;
+    [Header("Checkpoints")]
+    public GameObject currentCheckpoint;
+
 
     private void Start()
     {
@@ -46,6 +55,24 @@ public class PlayerController : MonoBehaviour
         {
             Jump();
         }
+
+        if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.A))
+        {
+            animator.SetBool("isMoving", true);
+        }
+        if (Input.GetKeyUp(KeyCode.D) || Input.GetKeyUp(KeyCode.A))
+        {
+            animator.SetBool("isMoving", false);
+        }
+
+        //if(rb.velocity == Vector3.zero)
+        //{
+        //    animator.SetBool("isMoving", false);
+        //}
+        //else
+        //{
+        //    animator.SetBool("isMoving", true);
+        //}
     }
 
     private void FixedUpdate()
@@ -59,6 +86,23 @@ public class PlayerController : MonoBehaviour
         {
             print("Should be taking damage");
             TakeDamage(spikeDamage);
+            GameObject go = Instantiate(rockParticle, collision.transform.position, transform.rotation);
+            Destroy(collision.gameObject);
+        }
+    }
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.tag == "Checkpoint")
+        {
+            currentCheckpoint = other.gameObject;
+            other.GetComponentInChildren<Light>().color = Color.blue;
+            other.GetComponentInChildren<MeshRenderer>().material  = godRaysBlue;
+            playerStats.oxygen += 100;
+        }
+
+        if(other.tag == "Respawn")
+        {
+            transform.position = currentCheckpoint.transform.position;
         }
     }
     void TakeDamage(float amount)
@@ -121,12 +165,15 @@ public class PlayerController : MonoBehaviour
             // Apply horizontal movement
             rb.velocity = new Vector3(Input.GetAxis("Horizontal") * moveSpeed, rb.velocity.y, 0f);
         }
+
+
     }
 
     private void Jump()
     {
         // Apply vertical force for jumping
         rb.velocity = new Vector3(rb.velocity.x, jumpForce, 0f);
+        animator.SetTrigger("Jump");
     }
 
     private void Dash()
@@ -153,10 +200,12 @@ public class PlayerController : MonoBehaviour
         if( Physics.Raycast(transform.position, Vector3.down, out hit, raycastDistance, groundLayer))
         {
             isGrounded = true;
+            animator.SetBool("Land", true);
         }
         else
         {
             isGrounded = false;
+            animator.SetBool("Land", false);
         }
     }
 }

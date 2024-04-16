@@ -9,6 +9,8 @@ public class PlayerStats : MonoBehaviour
     public float maxOxygen;
     public float drainRate;
     public Slider oxygenSlider;
+
+    public UIManager uiManager;
     void Start()
     {
         oxygen = maxOxygen;
@@ -19,5 +21,14 @@ public class PlayerStats : MonoBehaviour
     {
         oxygen -= drainRate * Time.deltaTime;
         oxygenSlider.value = oxygen / maxOxygen;
+
+        if(oxygen < 0)
+        {
+            uiManager.RunOutOfOxygen();
+        }
+        if(oxygen > maxOxygen)
+        {
+            oxygen = maxOxygen;
+        }
     }
 }

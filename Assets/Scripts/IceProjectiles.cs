@@ -39,7 +39,7 @@ public class IceProjectiles : MonoBehaviour
         {
             GhostPosition();
         }
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetMouseButtonDown(1))
         {
             ghostActive = false;
             platformGhost.SetActive(false);

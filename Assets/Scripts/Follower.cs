@@ -9,6 +9,7 @@ public class Follower : MonoBehaviour
     public float distance;
     public Vector3 offset;
     private Rigidbody rb;
+    public Animator animator;
     public float jumpForce;
 
     void Start()
@@ -20,6 +21,20 @@ public class Follower : MonoBehaviour
     {
         CalculateDistanceToPlayer();
         CheckPlayersPosition();
+
+        if (rb.velocity == Vector3.zero)
+        {
+            animator.SetBool("isMoving", false);
+        }
+        else
+        {
+            animator.SetBool("isMoving", true);
+        }
+
+        if(distance > 15)
+        {
+            transform.position = player.transform.position;
+        }
     }
 
     void CalculateDistanceToPlayer()

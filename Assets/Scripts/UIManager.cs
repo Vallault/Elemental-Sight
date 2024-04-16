@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class UIManager : MonoBehaviour
 {
@@ -17,8 +18,14 @@ public class UIManager : MonoBehaviour
     public float iceCost;
     public float maxIce;
 
+    public GameObject pausePanel;
+    public GameObject deathPanel;
+    public GameObject winPanel;
+
+
     void Start()
     {
+        Time.timeScale = 1;
         fire = maxFire;
         ice = maxIce;
     }
@@ -35,5 +42,32 @@ public class UIManager : MonoBehaviour
         if(ice > maxIce) ice = maxIce;
         if(ice< 0) ice = 0;
         iceSlider.value = ice / maxIce;
+        
+
+        if(Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (pausePanel.activeInHierarchy)
+            {
+                Time.timeScale = 1;
+                pausePanel.SetActive(false);
+            }
+            else
+            {
+                Time.timeScale = 0;
+                pausePanel.SetActive(true);
+            }
+        }
+    }
+
+    public void RunOutOfOxygen()
+    {
+        Time.timeScale = 0;
+        deathPanel.SetActive(true);
+    }
+
+
+    public void LoadScene(string levelName)
+    {
+        
     }
 }
