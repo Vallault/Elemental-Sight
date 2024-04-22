@@ -9,6 +9,7 @@ TagManager:
   - Obstacle
   - GameManager
   - Spike
+  - Checkpoint
   layers:
   - Default
   - TransparentFX
